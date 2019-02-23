@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZoomOverlay", "ZoomOverlay\ZoomOverlay.csproj", "{86DAB7C5-9092-41D1-A5CC-4706D05DB698}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{86DAB7C5-9092-41D1-A5CC-4706D05DB698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86DAB7C5-9092-41D1-A5CC-4706D05DB698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86DAB7C5-9092-41D1-A5CC-4706D05DB698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86DAB7C5-9092-41D1-A5CC-4706D05DB698}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB122E52-66AB-4F37-A064-2D2B65B89402}
+	EndGlobalSection
+EndGlobal
