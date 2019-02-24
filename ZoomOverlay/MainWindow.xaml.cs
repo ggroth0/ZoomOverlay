@@ -41,6 +41,8 @@ namespace ZoomOverlay
             vm.Image = bmp;
 
             DataContext = vm;
+            vm.DotX = 100;
+            vm.DotY = 100;
         }
     }
 }

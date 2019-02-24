@@ -18,7 +18,7 @@
 
             <Grid Name="Border">
                 <Border >
-                    <Canvas MouseWheel="OnCanvasMouseWheel" MouseMove="TheCanvas_OnMouseMove" MouseDown="TheCanvas_OnMouseDown" MouseEnter="TheCanvas_OnMouseEnter" Name="TheCanvas">
+                    <Canvas MouseWheel="OnCanvasMouseWheel" MouseMove="TheCanvas_OnMouseMove" MouseDown="TheCanvas_OnMouseDown" Name="TheCanvas">
                         <Canvas.RenderTransform>
                                 <TranslateTransform x:Name="CanvasTranslater"></TranslateTransform>
                             </Canvas.RenderTransform>
@@ -28,7 +28,7 @@
 
                         <Image Name="TheImage"/>
 
-                        <Ellipse Name="Dot" Fill="GreenYellow" Width="5" Height="5"/>
+                        <Ellipse Name="Dot" Fill="GreenYellow" Width="5" Height="5" MouseDown="ShapeMouseDown" Cursor="SizeAll"/>
                     </Canvas>
                 </Border>
             </Grid>

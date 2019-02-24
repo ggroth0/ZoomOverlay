@@ -12,11 +12,12 @@ namespace ZoomOverlay.ViewModels
         private double _borderHeight;
         private double _borderWidth;
         private double _imageScaler;
+        private double _dotY;
+        private double _dotX;
 
         public ZoomOverlayViewModel()
         {
             ZoomFactor = 1.0;
-            ImageScaler = 1.0;
         }
 
         public BitmapSource Image
@@ -41,57 +42,25 @@ namespace ZoomOverlay.ViewModels
             }
         }
 
-        public double ImageScaler
+        public double DotX
         {
-            get { return _imageScaler; }
+            get { return _dotX; }
             set
             {
-                if (value.Equals(_imageScaler)) return;
-                _imageScaler = value;
+                if (value.Equals(_dotX)) return;
+                _dotX = value;
                 OnPropertyChanged();
             }
         }
 
-        public double BorderWidth
+        public double DotY
         {
-            get { return _borderWidth; }
+            get { return _dotY; }
             set
             {
-                if (value.Equals(_borderWidth)) return;
-                _borderWidth = value;
+                if (value.Equals(_dotY)) return;
+                _dotY = value;
                 OnPropertyChanged();
-                UpdateImageScaler();
-            }
-        }
-
-        public double BorderHeight
-        {
-            get { return _borderHeight; }
-            set
-            {
-                if (value.Equals(_borderHeight)) return;
-                _borderHeight = value;
-                OnPropertyChanged();
-                UpdateImageScaler();
-            }
-        }
-
-        private void UpdateImageScaler()
-        {
-            var imageWidth = Image.PixelWidth;
-            var imageHeight = Image.PixelHeight;
-
-            if (imageWidth > 0 && imageHeight > 0 && BorderWidth > 0 && BorderHeight > 0)
-            {
-
-                if (BorderWidth / BorderHeight >= imageWidth / imageHeight)
-                {
-                    ImageScaler = ZoomFactor * imageWidth / BorderWidth;
-                }
-                else
-                {
-                    ImageScaler = ZoomFactor * imageHeight / BorderHeight;
-                }
             }
         }
 

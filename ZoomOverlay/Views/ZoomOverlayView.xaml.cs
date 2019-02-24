@@ -45,23 +45,17 @@ namespace ZoomOverlay.Views
                 if (_imageWidth > 0 && _imageHeight > 0 && containerWidth > 0 && containerHeight > 0)
                 {
                     _scale = 1.0;
-                    double imageLeft = 0, imageTop = 0;
 
                     if (containerWidth / containerHeight >= _imageWidth / _imageHeight)
                     {
                         //container too wide
                         _scale = ZoomFactor * containerHeight / _imageHeight;
-                        imageLeft = (containerWidth / _scale - _imageWidth) / 2;
                     }
                     else
                     {
                         //container too tall
                         _scale = ZoomFactor * containerWidth / _imageWidth;
-                        imageTop = (containerHeight / _scale - _imageHeight) / 2;
                     }
-
-                    Canvas.SetLeft(Dot, _imageWidth / 4 - 2.5);
-                    Canvas.SetTop(Dot, _imageHeight / 4 - 2.5);
 
                     Border.Width = _scale * _imageWidth;
                     Border.Height = _scale * _imageHeight;
@@ -100,6 +94,8 @@ namespace ZoomOverlay.Views
         private double _vOffsetOrigin;
         private double _hOffsetOrigin;
         private double _scale;
+        private Shape _draggedShape;
+        private Point _draggedShapePosition;
 
         public static readonly DependencyProperty ZoomFactorProperty = DependencyProperty.Register(
             "ZoomFactor", typeof(double), typeof(ZoomOverlayView), new PropertyMetadata(default(double), (o, args) =>
@@ -116,18 +112,16 @@ namespace ZoomOverlay.Views
         private void OnCanvasMouseWheel(object sender, MouseWheelEventArgs e)
         {
             var canvasMousePos = e.GetPosition(TheCanvas);
-            //canvasMousePos.X /= TheCanvas.ActualWidth;
-            //canvasMousePos.Y /= TheCanvas.ActualHeight;
             var scrollerMousePos = e.GetPosition(SV_Container);
 
             if (e.Delta > 0)
             {
-                ZoomFactor += 1;
+                ZoomFactor *= 1.5;
             }
             else
             {
                 var z = ZoomFactor;
-                z -= 1;
+                z /= 1.5;
                 ZoomFactor = z < 1 ? 1 : z;
             }
 
@@ -137,17 +131,27 @@ namespace ZoomOverlay.Views
 
         private void TheCanvas_OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (_dragActive && e.LeftButton == MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var pos = e.GetPosition(SV_Container);
-                SV_Container.ScrollToVerticalOffset(_vOffsetOrigin + _start.Y - pos.Y);
-                SV_Container.ScrollToHorizontalOffset(_hOffsetOrigin + _start.X - pos.X);
-            }
-        }
+                var canvasPos = e.GetPosition(TheCanvas);
 
-        private void TheCanvas_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            Cursor = Cursors.SizeAll;
+                if (_draggedShape != null)
+                {
+                    DotX = canvasPos.X;
+                    DotY = canvasPos.Y;
+                }
+                else if (_dragActive)
+                {
+                    SV_Container.ScrollToVerticalOffset(_vOffsetOrigin + _start.Y - pos.Y);
+                    SV_Container.ScrollToHorizontalOffset(_hOffsetOrigin + _start.X - pos.X);
+                }
+            }
+            else
+            {
+                _dragActive = false;
+                _draggedShape = null;
+            }
         }
 
         private void TheCanvas_OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -157,6 +161,48 @@ namespace ZoomOverlay.Views
 
             _vOffsetOrigin = SV_Container.VerticalOffset;
             _hOffsetOrigin = SV_Container.HorizontalOffset;
+        }
+
+        private void ShapeMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _draggedShape = sender as Shape;
+            if (_draggedShape != null)
+            {
+                _draggedShapePosition.X = Canvas.GetLeft(_draggedShape);
+                _draggedShapePosition.Y = Canvas.GetTop(_draggedShape);
+            }
+        }
+
+        private void UpdateDot()
+        {
+            Canvas.SetLeft(Dot, DotX - 2.5);
+            Canvas.SetTop(Dot, DotY - 2.5);
+        }
+
+        private static void DotPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ZoomOverlayView view)
+            {
+                view.UpdateDot();
+            }
+        }
+
+        public static readonly DependencyProperty DotXProperty = DependencyProperty.Register(
+            "DotX", typeof(double), typeof(ZoomOverlayView), new PropertyMetadata(default(double), DotPositionChanged));
+
+        public double DotX
+        {
+            get { return (double) GetValue(DotXProperty); }
+            set { SetValue(DotXProperty, value); }
+        }
+
+        public static readonly DependencyProperty DotYProperty = DependencyProperty.Register(
+            "DotY", typeof(double), typeof(ZoomOverlayView), new PropertyMetadata(default(double), DotPositionChanged));
+
+        public double DotY
+        {
+            get { return (double) GetValue(DotYProperty); }
+            set { SetValue(DotYProperty, value); }
         }
     }
 }
